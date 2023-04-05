@@ -10,6 +10,14 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            //args[0] = "asd";
+            //CombinationGenerator combinationGenerator = new CombinationGenerator(args[0]);
+            CombinationGenerator combinationGenerator = new CombinationGenerator("asd");
+            do
+            {
+                Console.WriteLine(combinationGenerator.generateUniqueString());
+            }
+            while (!combinationGenerator.printAllCombinations());
         }
     }
 }
