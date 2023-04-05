@@ -8,32 +8,35 @@ namespace ConsoleApp1
 {
     class CombinationGenerator
     {
-        private List<char> charIndexes;
-        private List<char> sourceCharIndexes;
+        private List<char> charIndexes = new List<char>();
+        private List<char> sourceCharIndexes = new List<char>();
         private int currentCombinationNumber = 0;
         private int sourseStringLength;
         private int maxCombinationMumber = 0;
 
         public CombinationGenerator(string sourseString)
         {
-            this.charIndexes = new List<char>();
-            this.sourceCharIndexes = new List<char>();
             int startIndex = 0;
+            int variantsCount = 0;
             foreach (char current in sourseString)
             {
+                if (!this.charIndexes.Contains(current))
+                {
+                    variantsCount++;
+                }
                 this.charIndexes.Add(current);
-                this.sourceCharIndexes.Add(current);
                 startIndex++;
             }
+            this.sourceCharIndexes = this.charIndexes.ToList();
             this.sourseStringLength = startIndex;
-            this.maxCombinationMumber = FactorialGenerator.generate(startIndex);
+            
+            this.maxCombinationMumber = FactorialGenerator.generate(this.sourseStringLength);
+            this.maxCombinationMumber = this.maxCombinationMumber / (this.sourseStringLength - variantsCount + 1);
         }
 
         internal string generateUniqueString()
         {
-
-
-            string result = "";// Char.ToString(this.charIndexes[0]);
+            string result = "";
             List<char> tempDict = this.charIndexes.ToList();
 
             for (int startIndex = 1; startIndex <= this.sourseStringLength; startIndex++)
@@ -53,12 +56,16 @@ namespace ConsoleApp1
             if (printAllCombinationForFirstChar && !this.printAllCombinations())
             {
                 this.charIndexes = this.sourceCharIndexes.ToList();
-                int swapIndex = this.sourseStringLength - this.currentCombinationNumber / (this.sourseStringLength - 1);
-                char tmp = this.charIndexes[0];
-                this.charIndexes[0] = this.charIndexes[swapIndex];
-                this.charIndexes[swapIndex] = tmp;
+                double var1 = Math.Round((float)(this.currentCombinationNumber / (this.sourseStringLength - 1)));
+                int swapIndex = (int)((double)this.sourseStringLength - var1);
+                if (swapIndex >= 0)
+                {
+                    char tmp = this.charIndexes[0];
+                    this.charIndexes[0] = this.charIndexes[swapIndex];
+                    this.charIndexes[swapIndex] = tmp;
+                }
             }
-            return result;
+            return string.Format("{0}. {1}", this.currentCombinationNumber, result);
         }
 
         internal bool printAllCombinations()

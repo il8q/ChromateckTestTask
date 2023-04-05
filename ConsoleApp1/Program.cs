@@ -12,7 +12,7 @@ namespace ConsoleApp1
         {
             //args[0] = "asd";
             //CombinationGenerator combinationGenerator = new CombinationGenerator(args[0]);
-            CombinationGenerator combinationGenerator = new CombinationGenerator("asd");
+            CombinationGenerator combinationGenerator = new CombinationGenerator("aabc");
             do
             {
                 Console.WriteLine(combinationGenerator.generateUniqueString());
