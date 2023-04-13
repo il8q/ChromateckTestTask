@@ -6,35 +6,15 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp1
 {
-    class CombinationGenerator
+    class CombinationGenerator: CombinatorInterface
     {
-        private List<char> charIndexes = new List<char>();
-        private List<char> sourceCharIndexes = new List<char>();
-        private int currentCombinationNumber = 0;
-        private int sourseStringLength;
-        private int maxCombinationMumber = 0;
+        public List<char> charIndexes = new List<char>();
+        public List<char> sourceCharIndexes = new List<char>();
+        public int currentCombinationNumber = 0;
+        public int sourseStringLength;
+        public int maxCombinationMumber = 0;
 
-        public CombinationGenerator(string sourseString)
-        {
-            int startIndex = 0;
-            int variantsCount = 0;
-            foreach (char current in sourseString)
-            {
-                if (!this.charIndexes.Contains(current))
-                {
-                    variantsCount++;
-                }
-                this.charIndexes.Add(current);
-                startIndex++;
-            }
-            this.sourceCharIndexes = this.charIndexes.ToList();
-            this.sourseStringLength = startIndex;
-            
-            this.maxCombinationMumber = FactorialGenerator.generate(this.sourseStringLength);
-            this.maxCombinationMumber = this.maxCombinationMumber / (this.sourseStringLength - variantsCount + 1);
-        }
-
-        internal string generateUniqueString()
+        public string generateUniqueString()
         {
             string result = "";
             List<char> tempDict = this.charIndexes.ToList();
@@ -58,7 +38,7 @@ namespace ConsoleApp1
                 this.charIndexes = this.sourceCharIndexes.ToList();
                 double var1 = Math.Round((float)(this.currentCombinationNumber / (this.sourseStringLength - 1)));
                 int swapIndex = (int)((double)this.sourseStringLength - var1);
-                if (swapIndex >= 0)
+                if (swapIndex >= 0 && (this.charIndexes[0] != this.charIndexes[swapIndex]))
                 {
                     char tmp = this.charIndexes[0];
                     this.charIndexes[0] = this.charIndexes[swapIndex];
@@ -68,7 +48,7 @@ namespace ConsoleApp1
             return string.Format("{0}. {1}", this.currentCombinationNumber, result);
         }
 
-        internal bool printAllCombinations()
+        public bool printAllCombinations()
         {
             return this.currentCombinationNumber == this.maxCombinationMumber;
         }
