@@ -14,11 +14,12 @@ namespace ConsoleApp1
         public int sourseStringLength;
         public int maxCombinationMumber = 0;
         public List<int> ignoreIndexChars = new List<int>();
-        public List<char> notUniqueChars;
+        public Dictionary<char, int> notUniqueChars;
         public int charVariantsCount;
         public int combinationCountForFirstChar;
         private int printCounter = 1;
-        public bool printForConsole = false;
+        public bool printForConsole = true;
+        public Dictionary<char, int> ingoreCombinationCounts;
 
         public string generateUniqueString()
         {
@@ -47,40 +48,45 @@ namespace ConsoleApp1
 
         private string generateSequenceWithoutFirstChar(int firstCharIndex)
         {
-            //char firstChar = this.sourceCharIndexes[firstCharIndex];
             string result = "";
             List<char> tempDict = this.charIndexes.ToList();
             tempDict.RemoveAt(firstCharIndex);
             int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength - 1);
+            char seedChar = this.sourceCharIndexes[permutationSeed];
 
-            for (int startIndex = 0; startIndex < this.sourseStringLength - 1; startIndex++)
+            for (int startIndex = tempDict.Count; startIndex > 0; startIndex--)
             {
-                int nextIndex = startIndex + permutationSeed;
-                while ((nextIndex + 1) > tempDict.Count)
+                int currentIndex = this.currentCombinationNumber % startIndex;
+                char nextChar = tempDict[currentIndex];
+                if (this.ingoreCombinationCounts.ContainsKey(nextChar)
+                    && this.ingoreCombinationCounts[nextChar] > 0)
                 {
-                    nextIndex = nextIndex - tempDict.Count;
+                    //this.currentCombinationNumber += this.ingoreCombinationCounts[nextChar];
                 }
-                char nextChar = tempDict[nextIndex];
-                //tempDict.RemoveAt(nextIndex);
+                tempDict.RemoveAt(currentIndex);
                 result += nextChar;
             }
+            result.Reverse();
             return result;
         }
 
         private int changeFirstSequenceCharIndex()
         {
             int result = this.getCharIndex(this.currentCombinationNumber);
+
             while (this.ignoreIndexChars.Contains(result))
             {
-                this.skipTheCharVariants();
+                this.skipTheCharVariants(result);
                 result = this.getCharIndex(this.currentCombinationNumber);
             }
+
             return result;
         }
 
-        private void skipTheCharVariants()
+        private void skipTheCharVariants(int charIndex)
         {
-            this.currentCombinationNumber += this.combinationCountForFirstChar;
+            char currentChar = this.sourceCharIndexes[charIndex];
+            this.currentCombinationNumber += this.combinationCountForFirstChar;// * this.notUniqueChars[currentChar];
         }
 
         private int getCharIndex(int seed)

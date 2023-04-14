@@ -13,7 +13,8 @@ namespace ConsoleApp1
             CombinatorBuilder builder = new CombinatorBuilder();
             builder.createEmptyCombinator();
             builder.setStringData(sourceString);
-            builder.findEqualChars();
+            builder.findNotUniqueChars();
+            builder.findIgnoreIndexChars();
             return builder.result;
         }
     }

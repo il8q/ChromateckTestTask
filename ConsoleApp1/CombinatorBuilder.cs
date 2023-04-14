@@ -39,22 +39,42 @@ namespace ConsoleApp1
             this.result.combinationCountForFirstChar = FactorialGenerator.generate(this.result.sourseStringLength - 1);
         }
 
-        internal void findEqualChars()
+        internal void findNotUniqueChars()
         {
-            List<char> notUniqueChars = new List<char>();
+            this.result.ingoreCombinationCounts = new Dictionary<char, int>();
+
+            Dictionary<char, int> notUniqueChars = new Dictionary<char, int>();
             List<char> sourceCharIndexes = this.result.sourceCharIndexes;
             foreach (char current in sourceCharIndexes)
             {
+                int count = sourceCharIndexes.Count(element => element == current);
                 if (
-                    sourceCharIndexes.Count(element => element == current) > 1
-                    && !notUniqueChars.Contains(current)
+                    count > 1
+                    && !notUniqueChars.ContainsKey(current)
                 )
                 {
-                    notUniqueChars.Add(current);
+                    notUniqueChars.Add(current, count);
+                    this.result.ingoreCombinationCounts.Add(
+                        current, this.generateIngoreCombinationCount(count)
+                    );
                 }
             }
             this.result.notUniqueChars = notUniqueChars;
+        }
 
+        private int generateIngoreCombinationCount(int count)
+        {
+            int result = 0;
+            for (int index = 2; index <= count; index++)
+            {
+                result += FactorialGenerator.generate(this.result.sourseStringLength - index);
+                // * (this.result.sourseStringLength - 1);
+            }
+            return result;
+        }
+
+        internal void findIgnoreIndexChars()
+        {
             for (int index = 0; index < this.result.sourseStringLength; index++)
             {
                 if (this.result.ignoreIndexChars.Contains(index))
