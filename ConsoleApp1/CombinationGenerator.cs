@@ -18,8 +18,9 @@ namespace ConsoleApp1
         public int charVariantsCount;
         public int combinationCountForFirstChar;
         private int printCounter = 1;
-        public bool printForConsole = true;
+        public bool printForConsole = false;
         public Dictionary<char, int> ingoreCombinationCounts;
+        internal int combinationShift;
 
         public string generateUniqueString()
         {
@@ -29,9 +30,9 @@ namespace ConsoleApp1
 
             
             int firstCharIndex = this.changeFirstSequenceCharIndex();
-            if (firstCharIndex < 0 || firstCharIndex >= this.sourseStringLength)
+            if (this.printAllCombinations())
             {
-                firstCharIndex = firstCharIndex;
+                //return;
             }
             result += this.sourceCharIndexes[firstCharIndex];
 
@@ -40,7 +41,6 @@ namespace ConsoleApp1
             if (this.printForConsole)
             {
                 return string.Format("{0}. combination seed {1}. {2}", this.printCounter++, this.currentCombinationNumber++, result);
-
             }
             this.currentCombinationNumber++;
             return result;
@@ -50,6 +50,7 @@ namespace ConsoleApp1
         {
             string result = "";
             List<char> tempDict = this.charIndexes.ToList();
+
             tempDict.RemoveAt(firstCharIndex);
             int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength - 1);
             char seedChar = this.sourceCharIndexes[permutationSeed];
@@ -66,6 +67,7 @@ namespace ConsoleApp1
                 tempDict.RemoveAt(currentIndex);
                 result += nextChar;
             }
+
             result.Reverse();
             return result;
         }
@@ -79,7 +81,14 @@ namespace ConsoleApp1
                 this.skipTheCharVariants(result);
                 result = this.getCharIndex(this.currentCombinationNumber);
             }
-
+            //this.currentCombinationNumber += this.combinationShift;
+            
+            // игнорируем повторяющиеся комбинации
+            int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength);
+            if (permutationSeed >= (this.combinationCountForFirstChar - this.combinationShift))
+            {
+                this.currentCombinationNumber += this.combinationShift - 1;
+            }
             return result;
         }
 
@@ -98,7 +107,7 @@ namespace ConsoleApp1
 
         public bool printAllCombinations()
         {
-            return this.currentCombinationNumber == this.maxCombinationMumber;
+            return this.currentCombinationNumber >= this.maxCombinationMumber;
         }
     }
 }

@@ -60,16 +60,30 @@ namespace ConsoleApp1
                 }
             }
             this.result.notUniqueChars = notUniqueChars;
+
+            int notUniqueCharCount = 0;
+            foreach (KeyValuePair<char, int> currentPair in notUniqueChars)
+            {
+                notUniqueCharCount += currentPair.Value;
+            }
+
+            this.result.combinationShift = this.result.maxCombinationMumber
+                - FactorialGenerator.generate(this.result.sourseStringLength)
+                    / FactorialGenerator.generate(notUniqueCharCount);
+            this.result.combinationShift = FactorialGenerator.generate(this.result.sourseStringLength - 1)
+                / notUniqueCharCount;
         }
 
         private int generateIngoreCombinationCount(int count)
         {
             int result = 0;
-            for (int index = 2; index <= count; index++)
+/*            for (int index = 2; index <= count; index++)
             {
-                result += FactorialGenerator.generate(this.result.sourseStringLength - index);
+                result += FactorialGenerator.generate(this.result.sourseStringLength - 1) / count;
                 // * (this.result.sourseStringLength - 1);
-            }
+            }*/
+            result += FactorialGenerator.generate(this.result.sourseStringLength - 1) / count;
+
             return result;
         }
 
@@ -85,6 +99,8 @@ namespace ConsoleApp1
                 findIndexes.RemoveAt(0);
                 this.result.ignoreIndexChars.AddRange(findIndexes);
             }
+
+
         }
 
         private List<int> findIndexes(int charIndex, List<char> sourceCharIndexes)

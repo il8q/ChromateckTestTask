@@ -34,7 +34,7 @@ namespace ConsoleApp1
                 //CombinationGenerator combinationGenerator = new CombinationGenerator(args[0]);
                 CombinatorInterface combinationGenerator = CombinatorBuilderDirector.createCombinator("aabc");
 /*                CombinatorInterface combinationGenerator = CombinatorBuilderDirector.createCombinator("4123");
-*/              do
+*/                do
                 {
                     result.Add(combinationGenerator.generateUniqueString());
                     Console.WriteLine(result.Last());
