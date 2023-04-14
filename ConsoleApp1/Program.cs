@@ -13,9 +13,14 @@ namespace ConsoleApp1
             
             foreach (string element in result)
             {
-                if (result.FindAll(current => element == element).Count > 1)
+                List<string> combination = result.FindAll(current => current == element);
+                if (combination.Count > 1)
                 {
-                    throw new Exception(String.Format("комбинация {0} уже существует", element));
+                    throw new Exception(
+                        String.Format("комбинация {0} уже существует. Комбинации {1}",
+                        element, 
+                        String.Join(", ", combination.ToArray())
+                    ));
                 }
             }
             return true;
@@ -39,6 +44,7 @@ namespace ConsoleApp1
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
+                Console.WriteLine(exception.StackTrace);
             }
         }
     }
