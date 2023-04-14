@@ -16,7 +16,9 @@ namespace ConsoleApp1
         public List<int> ignoreIndexChars = new List<int>();
         public List<char> notUniqueChars;
         public int charVariantsCount;
+        public int combinationCountForFirstChar;
         private int printCounter = 1;
+        public bool printForConsole = false;
 
         public string generateUniqueString()
         {
@@ -26,11 +28,21 @@ namespace ConsoleApp1
 
             
             int firstCharIndex = this.changeFirstSequenceCharIndex();
+            if (firstCharIndex < 0 || firstCharIndex >= this.sourseStringLength)
+            {
+                firstCharIndex = firstCharIndex;
+            }
             result += this.sourceCharIndexes[firstCharIndex];
 
             result += this.generateSequenceWithoutFirstChar(firstCharIndex);
 
-            return string.Format("{0}. combination seed {1}. {2}", this.printCounter++, this.currentCombinationNumber++, result);
+            if (this.printForConsole)
+            {
+                return string.Format("{0}. combination seed {1}. {2}", this.printCounter++, this.currentCombinationNumber++, result);
+
+            }
+            this.currentCombinationNumber++;
+            return result;
         }
 
         private string generateSequenceWithoutFirstChar(int firstCharIndex)
@@ -41,10 +53,10 @@ namespace ConsoleApp1
             tempDict.RemoveAt(firstCharIndex);
             int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength - 1);
 
-            for (int startIndex = 0; startIndex < (this.sourseStringLength - 1); startIndex++)
+            for (int startIndex = 0; startIndex < this.sourseStringLength - 1; startIndex++)
             {
                 int nextIndex = startIndex + permutationSeed;
-                if ((nextIndex + 1) > tempDict.Count)
+                while ((nextIndex + 1) > tempDict.Count)
                 {
                     nextIndex = nextIndex - tempDict.Count;
                 }
@@ -68,13 +80,13 @@ namespace ConsoleApp1
 
         private void skipTheCharVariants()
         {
-            this.currentCombinationNumber += this.sourseStringLength;
+            this.currentCombinationNumber += this.combinationCountForFirstChar;
         }
 
         private int getCharIndex(int seed)
         {
             return (int)Math.Round(
-                (double)(seed / (this.sourseStringLength - 1))
+                (double)(seed / this.combinationCountForFirstChar)//(this.sourseStringLength - 1)
             );
         }
 

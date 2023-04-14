@@ -33,8 +33,10 @@ namespace ConsoleApp1
             this.result.sourseStringLength = startIndex;
 
             this.result.maxCombinationMumber = FactorialGenerator.generate(this.result.sourseStringLength);
-            this.result.maxCombinationMumber = this.result.maxCombinationMumber 
-                / (this.result.sourseStringLength - variantsCount + 1);
+            //this.result.maxCombinationMumber = this.result.maxCombinationMumber 
+            //    / (this.result.sourseStringLength - variantsCount + 1);
+
+            this.result.combinationCountForFirstChar = FactorialGenerator.generate(this.result.sourseStringLength - 1);
         }
 
         internal void findEqualChars()
