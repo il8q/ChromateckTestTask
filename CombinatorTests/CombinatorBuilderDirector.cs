@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CombinatorGenerator;
 
-namespace CombinatorGenerator
+namespace CombinatorTests
 {
     class CombinatorBuilderDirector
     {
-        public static CombinatorInterface createCombinator(string sourceString)
+        public static CombinationGenerator createTestCombinator(string sourceString)
         {
             CombinatorBuilder builder = new CombinatorBuilder();
             builder.createEmptyCombinator();

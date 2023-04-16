@@ -4,39 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace CombinatorGenerator
 {
-    class CombinationGenerator: CombinatorInterface
+    public class CombinationGenerator: CombinatorInterface
     {
-        public List<char> charIndexes = new List<char>();
-        public List<char> sourceCharIndexes = new List<char>();
+        public String sourceString;
+        public List<int> indexList;
         public int currentCombinationNumber = 0;
         public int sourseStringLength;
         public int maxCombinationMumber = 0;
-        public List<int> ignoreIndexChars = new List<int>();
-        public Dictionary<char, int> notUniqueChars;
-        public int charVariantsCount;
-        public int combinationCountForFirstChar;
         private int printCounter = 1;
         public bool printForConsole = false;
-        public Dictionary<char, int> ingoreCombinationCounts;
-        internal int combinationShift;
 
         public string generateUniqueString()
         {
             string result = "";
-            List<char> tempDict = this.charIndexes.ToList();
-            List<int> charIndexs = new List<int>();
-
-            
-            int firstCharIndex = this.changeFirstSequenceCharIndex();
-            if (this.printAllCombinations())
-            {
-                //return;
-            }
-            result += this.sourceCharIndexes[firstCharIndex];
-
-            result += this.generateSequenceWithoutFirstChar(firstCharIndex);
 
             if (this.printForConsole)
             {
@@ -46,68 +28,64 @@ namespace ConsoleApp1
             return result;
         }
 
-        private string generateSequenceWithoutFirstChar(int firstCharIndex)
-        {
-            string result = "";
-            List<char> tempDict = this.charIndexes.ToList();
-
-            tempDict.RemoveAt(firstCharIndex);
-            int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength - 1);
-            char seedChar = this.sourceCharIndexes[permutationSeed];
-
-            for (int startIndex = tempDict.Count; startIndex > 0; startIndex--)
-            {
-                int currentIndex = this.currentCombinationNumber % startIndex;
-                char nextChar = tempDict[currentIndex];
-                if (this.ingoreCombinationCounts.ContainsKey(nextChar)
-                    && this.ingoreCombinationCounts[nextChar] > 0)
-                {
-                    //this.currentCombinationNumber += this.ingoreCombinationCounts[nextChar];
-                }
-                tempDict.RemoveAt(currentIndex);
-                result += nextChar;
-            }
-
-            result.Reverse();
-            return result;
-        }
-
-        private int changeFirstSequenceCharIndex()
-        {
-            int result = this.getCharIndex(this.currentCombinationNumber);
-
-            while (this.ignoreIndexChars.Contains(result))
-            {
-                this.skipTheCharVariants(result);
-                result = this.getCharIndex(this.currentCombinationNumber);
-            }
-            //this.currentCombinationNumber += this.combinationShift;
-            
-            // игнорируем повторяющиеся комбинации
-            int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength);
-            if (permutationSeed >= (this.combinationCountForFirstChar - this.combinationShift))
-            {
-                this.currentCombinationNumber += this.combinationShift - 1;
-            }
-            return result;
-        }
-
-        private void skipTheCharVariants(int charIndex)
-        {
-            char currentChar = this.sourceCharIndexes[charIndex];
-            this.currentCombinationNumber += this.combinationCountForFirstChar;// * this.notUniqueChars[currentChar];
-        }
-
-        private int getCharIndex(int seed)
-        {
-            return (int)Math.Round(
-                (double)(seed / this.combinationCountForFirstChar)//(this.sourseStringLength - 1)
-            );
-        }
-
         public bool printAllCombinations()
         {
             return this.currentCombinationNumber >= this.maxCombinationMumber;
+        }
+
+        private void swap(ref List<int> indexArray, int i, int j)
+        {
+            int s = indexArray[i];
+            indexArray[i] = indexArray[j];
+            indexArray[j] = s;
+        }
+
+        public bool generateNextCombination(List<int> list, int sequenceLength)
+        {
+            int maxSwapIndex = this.findMaxIndex();
+            if (maxSwapIndex < 0)
+            {
+                return false;
+            }
+
+            int premaxSwapIndex = this.findPremaxIndex(maxSwapIndex);
+            this.sortRemainIndexSequence(maxSwapIndex);
+            return true;
+        }
+
+        public int findMaxIndex()
+        {
+            int maxIndex = this.sourseStringLength - 2;
+            while (
+                maxIndex >= 0 
+                && this.indexList[maxIndex] >= this.indexList[maxIndex + 1]
+            )
+            {
+                maxIndex--;
+            }
+            return maxIndex;
+        }
+
+        public int findPremaxIndex(int maxSwapIndex)
+        {
+            int premaxSwapIndex = this.sourseStringLength - 1;
+            while (this.indexList[maxSwapIndex] >= this.indexList[premaxSwapIndex])
+            {
+                premaxSwapIndex--;
+            }
+            this.swap(ref this.indexList, maxSwapIndex, premaxSwapIndex);
+            return premaxSwapIndex;
+        }
+
+        public List<int> sortRemainIndexSequence(int maxSwapIndex)
+        {
+            int left = maxSwapIndex + 1;
+            int right = this.sourseStringLength - 1;
+            while (left < right)
+            {
+                this.swap(ref this.indexList, left++, right--);
+            }
+            return this.indexList;
         }
     }
 }

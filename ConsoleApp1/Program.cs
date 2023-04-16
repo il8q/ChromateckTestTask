@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace CombinatorGenerator
 {
     class Program
     {
@@ -32,14 +32,24 @@ namespace ConsoleApp1
             {
                 List<string> result = new List<string>();
                 //CombinationGenerator combinationGenerator = new CombinationGenerator(args[0]);
-                CombinatorInterface combinationGenerator = CombinatorBuilderDirector.createCombinator("aabc");
-/*                CombinatorInterface combinationGenerator = CombinatorBuilderDirector.createCombinator("4123");
-*/                do
+                //CombinatorInterface combinationGenerator = CombinatorBuilderDirector.createCombinator("aabc");
+               CombinatorInterface combinationGenerator = CombinatorBuilderDirector.createCombinator("4123");
+
+                List<int> list = new List<int>();
+                list.Add(1);
+                list.Add(2);
+                list.Add(3);
+                list.Add(4);
+                while (combinationGenerator.generateNextCombination(list, list.Count))
+                {
+                    Console.WriteLine(string.Format("{0}", list.ToString()));
+                }
+/*                do
                 {
                     result.Add(combinationGenerator.generateUniqueString());
                     Console.WriteLine(result.Last());
                 }
-                while (!combinationGenerator.printAllCombinations());
+                while (!combinationGenerator.printAllCombinations());*/
                 checkResult(result);
             } 
             catch (Exception exception)
