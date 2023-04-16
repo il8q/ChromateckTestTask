@@ -51,8 +51,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CombinatorBuilderDirector.cs" />
-    <Compile Include="CombinatorTests.cs" />
+    <Compile Include="CombinatorInnerMethodsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CombinatorGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

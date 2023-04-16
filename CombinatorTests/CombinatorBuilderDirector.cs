@@ -7,14 +7,11 @@ using CombinatorGenerator;
 
 namespace CombinatorTests
 {
-    class CombinatorBuilderDirector
+    class CombinatorBuilderDirector: CombinatorGenerator.CombinatorBuilderDirector
     {
         public static CombinationGenerator createTestCombinator(string sourceString)
         {
-            CombinatorBuilder builder = new CombinatorBuilder();
-            builder.createEmptyCombinator();
-            builder.setStringData(sourceString);
-            return builder.result;
+            return generateFinishCombinator(sourceString);
         }
     }
 }
