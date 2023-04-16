@@ -22,7 +22,7 @@ namespace CombinatorTests
         [TestMethod]
         public void testFindMaxIndex()
         {
-            Assert.AreEqual(combinator.findMaxIndex(), 3);
+            Assert.AreEqual(combinator.findMaxIndex(), 2);
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace CombinatorTests
         {
             Assert.AreEqual(
                 combinator.findPremaxIndex(combinator.findMaxIndex()),
-                2
+                3
             );
         }
 
@@ -38,13 +38,31 @@ namespace CombinatorTests
         public void testSortRemainIndexSequence()
         {
             List<int> expected = new List<int>();
+            expected.Add(0);
             expected.Add(1);
-            expected.Add(2);
-            expected.Add(4);
             expected.Add(3);
+            expected.Add(2);
 
-            Assert.AreEqual(
+            CollectionAssert.AreEquivalent(
                 combinator.sortRemainIndexSequence(combinator.findMaxIndex()),
+                expected
+            );
+        }
+
+        [TestMethod]
+        public void testSortRemainIndexSequence2()
+        {
+            CombinationGenerator combinator = CombinatorTests.CombinatorBuilderDirector.createTestCombinator(
+                "1134"
+            );
+            combinator.indexList = new List<int> { 0, 2, 1, 0 };
+            List<int> expected = new List<int> { 1, 0, 0, 2 };
+
+            int maxIndex = combinator.findMaxIndex();
+            int premaxIndex = combinator.findPremaxIndex(maxIndex);
+            List<int> result = combinator.sortRemainIndexSequence(maxIndex);
+            CollectionAssert.AreEqual(
+                result,
                 expected
             );
         }

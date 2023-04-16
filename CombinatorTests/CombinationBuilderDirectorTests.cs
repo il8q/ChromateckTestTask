@@ -8,7 +8,7 @@ namespace CombinatorTests
     [TestClass]
     public class CombinationBuilderDirectorTests
     {
-        private void testForString(String source, int maxCombinationCount)
+        private void testForString(String source, int maxCombinationCount, List<int> expectedIndexList)
         {
             CombinationGenerator combinator = CombinatorTests.CombinatorBuilderDirector.createTestCombinator(
                 source
@@ -17,25 +17,15 @@ namespace CombinatorTests
             Assert.AreEqual(combinator.sourceString, source);
             Assert.AreEqual(combinator.sourseStringLength, source.Length);
 
-            List<int> expectedIndexList = new List<int>();
-            for (int i = 0; i < combinator.sourceString.Length; i++)
-            {
-                expectedIndexList.Add(i);
-            }
-
-            for (int i = 0; i < expectedIndexList.Count; i++)
-            {
-                Assert.AreEqual(combinator.indexList[i], expectedIndexList[i]);
-            }
-
+            CollectionAssert.AreEquivalent(combinator.indexList, expectedIndexList);
             //Assert.AreEqual(combinator.maxCombinationMumber, maxCombinationCount);
         }
 
         [TestMethod]
         public void testGenerateForWithoutDublicate()
         {
-            testForString("1234", 24);
-            testForString("1134", 12);
+            testForString("1234", 24, new List<int> {0, 1, 2, 3} );
+            testForString("1134", 12, new List<int> {0, 0, 1, 2} );
         }
     }
 }

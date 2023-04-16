@@ -10,6 +10,7 @@ namespace CombinatorGenerator
     {
         public String sourceString;
         public List<int> indexList;
+        public Dictionary<int, char> charToIndexList;
         public int currentCombinationNumber = 0;
         public int sourseStringLength;
         public int maxCombinationMumber = 0;
@@ -37,7 +38,7 @@ namespace CombinatorGenerator
             String result = "";
             foreach (int index in this.indexList)
             {
-                result += this.sourceString[index];
+                result += this.charToIndexList[index];
             }
             return result;
         }
@@ -68,7 +69,7 @@ namespace CombinatorGenerator
         }
 
         public int findMaxIndex()
-        {
+        {// 1 4 3 1
             int maxIndex = this.sourseStringLength - 2;
             while (
                 maxIndex >= 0 
@@ -77,16 +78,20 @@ namespace CombinatorGenerator
             {
                 maxIndex--;
             }
-            return maxIndex;
+            return maxIndex;//++
         }
 
         public int findPremaxIndex(int maxSwapIndex)
         {
             int premaxSwapIndex = this.sourseStringLength - 1;
-            while (this.indexList[maxSwapIndex] >= this.indexList[premaxSwapIndex])
+            while (
+                premaxSwapIndex >= 0
+                && this.indexList[maxSwapIndex] >= this.indexList[premaxSwapIndex]
+                )
             {
                 premaxSwapIndex--;
             }
+            //premaxSwapIndex++;
             this.swap(ref this.indexList, maxSwapIndex, premaxSwapIndex);
             return premaxSwapIndex;
         }

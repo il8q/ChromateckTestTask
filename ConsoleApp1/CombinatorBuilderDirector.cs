@@ -23,6 +23,7 @@ namespace CombinatorGenerator
             CombinatorBuilder builder = new CombinatorBuilder();
             builder.createEmptyCombinator();
             builder.setStringData(sourceString);
+            builder.generateCharIndexes();
             return builder.result;
         }
     }
