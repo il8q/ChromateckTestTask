@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CombinatorGenerator
 {
-    interface CombinatorInterface
+    public interface CombinatorInterface
     {
         string generateUniqueString();
         bool printAllCombinations();
-        bool generateNextCombination(List<int> list, int sequenceLength);
     }
 }

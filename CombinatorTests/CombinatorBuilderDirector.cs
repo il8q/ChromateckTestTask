@@ -11,7 +11,9 @@ namespace CombinatorTests
     {
         public static CombinationGenerator createTestCombinator(string sourceString)
         {
-            return generateFinishCombinator(sourceString);
+            CombinationGenerator result = generateFinishCombinator(sourceString);
+            result.printForConsole = false;
+            return result;
         }
     }
 }

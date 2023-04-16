@@ -11,9 +11,9 @@ namespace CombinatorTests
         CombinationGenerator combinator;
 
         [TestInitialize]
-        public void TestInitialize()
+        public void testInitialize()
         {
-            this.combinator = CombinatorBuilderDirector.createTestCombinator(
+            this.combinator = CombinatorTests.CombinatorBuilderDirector.createTestCombinator(
                 "1234"
             );
         }

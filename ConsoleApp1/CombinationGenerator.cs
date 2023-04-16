@@ -14,17 +14,31 @@ namespace CombinatorGenerator
         public int sourseStringLength;
         public int maxCombinationMumber = 0;
         private int printCounter = 1;
-        public bool printForConsole = false;
+        public bool printForConsole = true;
 
         public string generateUniqueString()
         {
-            string result = "";
+            if (this.currentCombinationNumber > 0)
+            {
+                this.generateNextCombination();
+            }
 
+            string result = this.generateCurrentString();
             if (this.printForConsole)
             {
                 return string.Format("{0}. combination seed {1}. {2}", this.printCounter++, this.currentCombinationNumber++, result);
             }
             this.currentCombinationNumber++;
+            return result;
+        }
+
+        private string generateCurrentString()
+        {
+            String result = "";
+            foreach (int index in this.indexList)
+            {
+                result += this.sourceString[index];
+            }
             return result;
         }
 
@@ -40,7 +54,7 @@ namespace CombinatorGenerator
             indexArray[j] = s;
         }
 
-        public bool generateNextCombination(List<int> list, int sequenceLength)
+        public bool generateNextCombination()
         {
             int maxSwapIndex = this.findMaxIndex();
             if (maxSwapIndex < 0)

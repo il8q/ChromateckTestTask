@@ -17,11 +17,19 @@ namespace CombinatorGenerator
 
         public void setStringData(string sourseString)
         {
+            this.result.sourceString = sourseString;
             this.result.sourseStringLength = sourseString.Length;
 
             this.result.maxCombinationMumber = FactorialGenerator.generate(this.result.sourseStringLength);
             //this.result.maxCombinationMumber = this.result.maxCombinationMumber 
             //    / (this.result.sourseStringLength - variantsCount + 1);
+
+            List<int> indexList = new List<int>();
+            for (int index = 0; index < sourseString.Length; index++)
+            {
+                indexList.Add(index);
+            }
+            this.result.indexList = indexList;
         }
     }
 }
