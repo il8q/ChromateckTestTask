@@ -84,7 +84,7 @@ namespace CombinatorGenerator
             string result = "";
             String tempDict = this.sourceString;
 
-            tempDict = tempDict.Remove(firstCharIndex, 1);
+            tempDict = tempDict.Remove(firstCharIndex, 1);//-1?
             int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength - 1);
             char seedChar = this.sourceString[permutationSeed];
 
@@ -93,19 +93,26 @@ namespace CombinatorGenerator
                 int currentIndex = this.currentCombinationNumber % startIndex;
                 char currentChar = tempDict[currentIndex];
 
-                bool nextEquealCurrent = false;
-                if ((currentIndex + 1) < tempDict.Length)
+                bool lastEquealCurrent = false;
+                if (result.Length > 0)
                 {
-                    nextEquealCurrent = tempDict[currentIndex + 1] == currentChar;
+                    lastEquealCurrent = result[result.Length - 1] == currentChar;
                 }
+                
                 if (
                     this.ingoreCombinationCounts.ContainsKey(currentChar)
-                    && this.ingoreCombinationCounts[currentChar] > 0
                     && currentIndex > 0
-                    && nextEquealCurrent
+                    && lastEquealCurrent
                     )
                 {
-                    this.currentCombinationNumber += FactorialGenerator.generate(this.sourseStringLength - 1 - startIndex);
+                    // currentIndex + tempDict.Length
+                    int combination = FactorialGenerator.generate(tempDict.Length - currentIndex);
+                    if (combination > 1)
+                    {
+                        this.currentCombinationNumber += combination;// (int)Math.Ceiling((double)combination / 2);//
+                    }
+                    
+                    //
                 }
                 tempDict = tempDict.Remove(currentIndex, 1);
                 result += currentChar;
