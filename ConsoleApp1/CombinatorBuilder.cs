@@ -21,8 +21,104 @@ namespace CombinatorGenerator
             this.result.sourseStringLength = sourseString.Length;
 
             this.result.maxCombinationMumber = FactorialGenerator.generate(this.result.sourseStringLength);
+            this.result.combinationCountForFirstChar = FactorialGenerator.generate(this.result.sourseStringLength - 1);
             //this.result.maxCombinationMumber = this.result.maxCombinationMumber 
             //    / (this.result.sourseStringLength - variantsCount + 1);
+
+            int variantsCount = 0;
+            foreach (char current in sourseString)
+            {
+                if (!sourseString.Contains(current))
+                {
+                    variantsCount++;
+                }
+            }
+            this.result.charVariantsCount = variantsCount;
+        }
+
+
+        internal void findNotUniqueChars()
+        {
+            this.result.ingoreCombinationCounts = new Dictionary<char, int>();
+
+            Dictionary<char, int> notUniqueChars = new Dictionary<char, int>();
+            String sourceCharIndexes = this.result.sourceString;
+            foreach (char current in sourceCharIndexes)
+            {
+                int count = sourceCharIndexes.Count(element => element == current);
+                if (
+                    count > 1
+                    && !notUniqueChars.ContainsKey(current)
+                )
+                {
+                    notUniqueChars.Add(current, count);
+                    this.result.ingoreCombinationCounts.Add(
+                        current, this.generateIngoreCombinationCount(count)
+                    );
+                }
+            }
+            this.result.notUniqueChars = notUniqueChars;
+
+            int notUniqueCharCount = 0;
+            foreach (KeyValuePair<char, int> currentPair in notUniqueChars)
+            {
+                notUniqueCharCount += currentPair.Value;
+            }
+
+            this.result.combinationShift = this.result.maxCombinationMumber
+                - FactorialGenerator.generate(this.result.sourseStringLength)
+                    / FactorialGenerator.generate(notUniqueCharCount);
+            if (notUniqueCharCount > 0)
+            {
+                this.result.combinationShift = FactorialGenerator.generate(this.result.sourseStringLength - 1)
+                    / notUniqueCharCount;
+            }
+            
+        }
+
+        private int generateIngoreCombinationCount(int count)
+        {
+            int result = 0;
+            /*            for (int index = 2; index <= count; index++)
+                        {
+                            result += FactorialGenerator.generate(this.result.sourseStringLength - 1) / count;
+                            // * (this.result.sourseStringLength - 1);
+                        }*/
+            result += FactorialGenerator.generate(this.result.sourseStringLength - 1) / count;
+
+            return result;
+        }
+        
+        public void findIgnoreIndexChars()
+        {
+            for (int index = 0; index < this.result.sourseStringLength; index++)
+            {
+                if (this.result.ignoreIndexChars.Contains(index))
+                {
+                    continue;
+                }
+                List<int> findIndexes = this.findIndexes(index, this.result.sourceString);
+                findIndexes.RemoveAt(0);
+                this.result.ignoreIndexChars.AddRange(findIndexes);
+            }
+        }
+        private List<int> findIndexes(int charIndex, String sourceCharIndexes)
+        {
+            List<int> result = new List<int>();
+            for (int index = 0; index < sourceCharIndexes.Length; index++)
+            {
+                int findIndex = sourceCharIndexes.IndexOf(sourceCharIndexes[charIndex], index);
+                if (findIndex >= 0)
+                {
+                    result.Add(findIndex);
+                    index = findIndex;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            return result;
         }
 
         public void generateCharIndexes()

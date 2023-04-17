@@ -24,6 +24,11 @@ namespace CombinatorGenerator
             builder.createEmptyCombinator();
             builder.setStringData(sourceString);
             builder.generateCharIndexes();
+
+            builder.createEmptyCombinator();
+            builder.setStringData(sourceString);
+            builder.findNotUniqueChars();
+            builder.findIgnoreIndexChars();
             return builder.result;
         }
     }
