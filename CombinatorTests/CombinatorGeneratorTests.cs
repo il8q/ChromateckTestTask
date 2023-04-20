@@ -42,60 +42,17 @@ namespace CombinatorTests
         [TestMethod]
         public void TestFourCharString()
         {
-            //TestOnString("1234", 24);
+            TestOnString("1234", 24);
             TestOnString("1134", 12);
             TestOnString("3411", 12);
+            TestOnString("3114", 12);
+            TestOnString("1341", 12);
             TestOnString("1114", 4);
             TestOnString("1122", 6);
-            /**
-             * 1122
-             * 1221
-             * 1212
-             * 2211
-             * 2121
-             * 2112
-             * 
-             * 1212
-             * 1221
-             * 2121
-             * 2211
-             */
         }
 
-        [TestMethod]
-        public void TestByStepFourCharString()
+        private void checkSeedForString(String source, List<int> expectedSeed)
         {
-            const String source = "1134";
-            List<string> expectedResultString = new List<string>
-            {
-                "1134",
-                "1143",
-                "1314",
-                "1341",
-                "1413",
-                "1431",
-                "3114",
-                "3141",
-                "3411",
-                "4113",
-                "4131",
-                "4311",
-            }; 
-            List<int> expectedSeed = new List<int>
-            {
-                1,
-                2,
-                3,
-                4,
-                5,
-                6,
-                16,
-                17,
-                18,
-                22,
-                23,
-                24,
-            };
 
             List<string> result = new List<string>();
             CombinationGenerator combinationGenerator = CombinatorTests.CombinatorBuilderDirector.createTestCombinator(source);
@@ -105,10 +62,42 @@ namespace CombinatorTests
             {
                 result.Add(combinationGenerator.generateUniqueString());
                 Assert.AreEqual(combinationGenerator.currentCombinationNumber, expectedSeed[index]);
-                //Assert.AreEqual(result[index], expectedResultString[index]);
                 index++;
             }
             while (!combinationGenerator.printAllCombinations());
+        }
+
+        [TestMethod]
+        public void TestByStepFourCharString()
+        {
+            this.checkSeedForString("1134", new List<int>{
+                1,
+                2,
+                3,
+                4,
+                5,
+                12,
+                16,
+                17,
+                18,
+                22,
+                23,
+                24,
+            });
+            this.checkSeedForString("3411", new List<int>{
+                4,
+                5,
+                6,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                24,
+            });
         }
     }
 }
