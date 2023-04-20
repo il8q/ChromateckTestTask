@@ -19,21 +19,14 @@ namespace CombinatorGenerator
 
         public List<int> ignoreIndexChars = new List<int>();
         public int combinationCountForFirstChar;
-        public int combinationShift;
         public Dictionary<char, int> ingoreCombinationCounts;
         public int charVariantsCount;
         public Dictionary<char, int> notUniqueChars;
 
         public string generateUniqueString()
         {
-            /*            if (this.currentCombinationNumber > 0)
-                        {
-                            this.generateNextCombination();
-                        }
-
-                        string result = this.generateCurrentString();*/
-
             string result = "";
+
             int firstCharIndex = this.changeFirstSequenceCharIndex();
             result += this.sourceString[firstCharIndex];
             result += this.generateSequenceWithoutFirstChar(firstCharIndex);
@@ -49,19 +42,39 @@ namespace CombinatorGenerator
         private int changeFirstSequenceCharIndex()
         {
             int result = this.getCharIndex(this.currentCombinationNumber);
+            if (needSkipDublicates())
+            {
+                result = this.skipEquivalentCombinationsForFirstChar(result);
+            }
+            return result;
+        }
 
-            while (this.ignoreIndexChars.Contains(result))
+        private bool needSkipDublicates()
+        {
+            return this.charVariantsCount < this.sourseStringLength;
+        }
+
+        private int skipEquivalentCombinationsForFirstChar(int result)
+        {
+            bool skipDublicateFirstChar = false;
+            while (
+                this.ignoreIndexChars.Contains(result)
+            //&& (this.currentCombinationNumber / this.sourseStringLength < (this.sourseStringLength - 1))
+            )
             {
                 this.skipTheCharVariants(result);
                 result = this.getCharIndex(this.currentCombinationNumber);
+                skipDublicateFirstChar = true;
             }
-            //this.currentCombinationNumber += this.combinationShift;
 
-            // игнорируем повторяющиеся комбинации
-            int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength);
-            if (permutationSeed >= (this.combinationCountForFirstChar - this.combinationShift))
+            int permutationSeed = this.currentCombinationNumber % (this.maxCombinationMumber / this.sourseStringLength);
+            // currentSeedOnStartCombinationSet=true - означает что мы только начинаем перебирать комбинации
+            // для первого выбранного символа
+            bool currentSeedOnStartCombinationSet = permutationSeed == 0;
+            if (currentSeedOnStartCombinationSet)
             {
-                this.currentCombinationNumber += this.combinationShift - 1;
+                int uniqueCombinationCount = this.getCombinationCount(this.sourseStringLength - 1, this.sourceString[result]);
+                this.currentCombinationNumber += this.combinationCountForFirstChar - uniqueCombinationCount;
             }
             return result;
         }
@@ -74,7 +87,7 @@ namespace CombinatorGenerator
 
         private int getCharIndex(int seed)
         {
-            return (int)Math.Round(
+            return (int)Math.Ceiling(
                 (double)(seed / this.combinationCountForFirstChar)//(this.sourseStringLength - 1)
             );
         }
@@ -82,44 +95,100 @@ namespace CombinatorGenerator
         private string generateSequenceWithoutFirstChar(int firstCharIndex)
         {
             string result = "";
-            String tempDict = this.sourceString;
+            String tempString = this.sourceString;
 
-            tempDict = tempDict.Remove(firstCharIndex, 1);//-1?
+            tempString = tempString.Remove(firstCharIndex, 1);//-1?
             int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength - 1);
             char seedChar = this.sourceString[permutationSeed];
 
-            for (int startIndex = tempDict.Length; startIndex > 0; startIndex--)
+/*            if (this.needSkipDublicates() && this.ignoreIndexChars.Contains(firstCharIndex))
             {
-                int currentIndex = this.currentCombinationNumber % startIndex;
-                char currentChar = tempDict[currentIndex];
-
-                bool lastEquealCurrent = false;
-                if (result.Length > 0)
+                int notUniqueCharCountToSubstring = this.sourseStringLength - this.charVariantsCount + 1;
+                int substringSeed = this.currentCombinationNumber
+                    % FactorialGenerator.generate(this.sourseStringLength - 1);//this.getCombinationCount(tempString.Length, notUniqueCharCountToSubstring);
+                if (substringSeed == 0)
                 {
-                    lastEquealCurrent = result[result.Length - 1] == currentChar;
+                    this.skipEquivalentCombinationsForString(seedChar, tempString, notUniqueCharCountToSubstring);
                 }
                 
-                if (
-                    this.ingoreCombinationCounts.ContainsKey(currentChar)
+            }*/
+
+            for (int startIndex = tempString.Length; startIndex > 0; startIndex--)
+            {
+                int currentIndex = this.currentCombinationNumber % startIndex;
+                char currentChar = tempString[currentIndex];
+
+                /*                bool lastInResultEquealCurrent = false;
+                                if (result.Length > 0)
+                                {
+                                    lastInResultEquealCurrent = result[result.Length - 1] == currentChar;
+                                }
+
+                                bool lastInTempEqualCurrent = false;
+                                if (tempString.Length == 2)
+                                {
+                                    //lastInTempEqualCurrent = (tempString[0] == currentChar) || (tempString[1] == currentChar);
+                                }*/
+
+                /*if (
+                    this.needSkipDublicates()
+                    && this.ingoreCombinationCounts.ContainsKey(currentChar)
                     && currentIndex > 0
-                    && lastEquealCurrent
+                    //&& (lastInResultEquealCurrent || lastInTempEqualCurrent)
+
                     )
                 {
-                    // currentIndex + tempDict.Length
-                    int combination = FactorialGenerator.generate(tempDict.Length - currentIndex);
-                    if (combination > 1)
-                    {
-                        this.currentCombinationNumber += combination;// (int)Math.Ceiling((double)combination / 2);//
-                    }
-                    
-                    //
-                }
-                tempDict = tempDict.Remove(currentIndex, 1);
+                    int combination = FactorialGenerator.generate(this.sourseStringLength - tempString.Length + currentIndex - 1);
+
+                    this.currentCombinationNumber += (int)Math.Floor((double)combination / 2);
+                }*/
+                tempString = tempString.Remove(currentIndex, 1);
                 result += currentChar;
             }
 
             result.Reverse();
             return result;
+        }
+
+        private void skipEquivalentCombinationsForString(
+            char charBeforeString, 
+            String substring, 
+            int notUniqueCharCountToSubstring
+        )
+        {
+            bool charBeforeInSubstring = substring.Contains(charBeforeString);
+            if (charBeforeInSubstring)
+            {
+                //notUniqueCharCountToSubstring--;
+            }
+            
+            int shift = (int)Math.Floor(
+                (double)FactorialGenerator.generate(notUniqueCharCountToSubstring + 1) / 2
+            );
+            //this.getCombinationCount(substring.Length, notUniqueCharCountToSubstring);
+/*            FactorialGenerator.generate(substring.Length) 
+                / FactorialGenerator.generate(notUniqueCharCountToSubstring);
+*/            
+            this.currentCombinationNumber += shift;
+        }
+
+        private int getCombinationCount(int stringLength, char ignoredChar)
+        {
+            int denominator = 1;
+            int notUniqueCharCount = 0;
+            foreach (KeyValuePair<char, int> currentPair in this.notUniqueChars)
+            {
+                if (currentPair.Key == ignoredChar)
+                {
+                    denominator *= FactorialGenerator.generate(currentPair.Value - 1);
+                } else
+                {
+                    denominator *= FactorialGenerator.generate(currentPair.Value);
+                }
+            }
+
+            int combinationCount = FactorialGenerator.generate(stringLength) / denominator;
+            return combinationCount;
         }
 
         private string generateCurrentString()
@@ -134,7 +203,7 @@ namespace CombinatorGenerator
 
         public bool printAllCombinations()
         {
-            return this.currentCombinationNumber >= this.maxCombinationMumber;
+            return this.currentCombinationNumber > this.maxCombinationMumber;
         }
 
         private void swap(ref List<int> indexArray, int i, int j)

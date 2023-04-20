@@ -26,10 +26,12 @@ namespace CombinatorGenerator
             //    / (this.result.sourseStringLength - variantsCount + 1);
 
             int variantsCount = 0;
+            List<char> uniqueChars = new List<char>();
             foreach (char current in sourseString)
             {
-                if (!sourseString.Contains(current))
+                if (!uniqueChars.Contains(current))
                 {
+                    uniqueChars.Add(current);
                     variantsCount++;
                 }
             }
@@ -58,22 +60,6 @@ namespace CombinatorGenerator
                 }
             }
             this.result.notUniqueChars = notUniqueChars;
-
-            int notUniqueCharCount = 0;
-            foreach (KeyValuePair<char, int> currentPair in notUniqueChars)
-            {
-                notUniqueCharCount += currentPair.Value;
-            }
-
-            this.result.combinationShift = this.result.maxCombinationMumber
-                - FactorialGenerator.generate(this.result.sourseStringLength)
-                    / FactorialGenerator.generate(notUniqueCharCount);
-            if (notUniqueCharCount > 0)
-            {
-                this.result.combinationShift = FactorialGenerator.generate(this.result.sourseStringLength - 1)
-                    / notUniqueCharCount;
-            }
-            
         }
 
         private int generateIngoreCombinationCount(int count)
