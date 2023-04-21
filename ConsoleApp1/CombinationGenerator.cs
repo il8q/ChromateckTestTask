@@ -109,7 +109,7 @@ namespace CombinatorGenerator
             this.currentCombinationNumber += this.combinationCountForFirstChar;
         }
 
-        private int GetCharIndex(int seed)
+        public int GetCharIndex(int seed)
         {
             return (int)Math.Ceiling(
                 (double)(seed / this.combinationCountForFirstChar)
@@ -125,16 +125,53 @@ namespace CombinatorGenerator
             int permutationSeed = currentCombinationNumber % (this.sourseStringLength - 1);
             char seedChar = this.sourceString[permutationSeed];
 
-            for (int startIndex = tempString.Length; startIndex > 0; startIndex--)
+            /** 
+                1234 i0=0  i1=0  i2=0  i3=0
+                1243 i0=0  i1=1  i2=  i3=
+                1324 i0=  i1=  i2=  i3=
+                1342 i0=  i1=  i2=  i3=
+                1423 i0=  i1=  i2=  i3=
+                1432 i0=  i1=  i2=  i3=
+             */
+
+            //i0 = i / !(N - 1) = i / 2
+            //'i1 = i%(N-1)
+            //i1 = (`i1 / !(N - 2)) 
+            int i = currentCombinationNumber;// / FactorialGenerator.generate(this.sourseStringLength - 1);
+            for (
+                    int j = 0; 
+                    (j < this.sourseStringLength - 1) && (tempString.Length > 0);
+                    j++
+                )
+            {
+                int i0 = i % FactorialGenerator.generate(this.sourseStringLength - j - 1);
+                int currentIndex = i0 / FactorialGenerator.generate(this.sourseStringLength - 2 - j);
+                i = i0;
+
+                char currentChar;
+                if (tempString.Length > 1)
+                {
+                    currentChar = tempString[currentIndex];
+                    tempString = tempString.Remove(currentIndex, 1);
+                } else
+                {
+                    currentChar = tempString[0];
+                    tempString = tempString.Remove(0, 1);
+                }
+                
+                result += currentChar;
+            }
+
+/*            for (int startIndex = tempString.Length; startIndex > 0; startIndex--)
             {
                 int currentIndex = currentCombinationNumber % startIndex;
                 char currentChar = tempString[currentIndex];
 
                 tempString = tempString.Remove(currentIndex, 1);
                 result += currentChar;
-            }
+            }*/
 
-            result.Reverse();
+            //result.Reverse();
             return result;
         }
 

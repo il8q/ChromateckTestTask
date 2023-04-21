@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CombinatorGenerator
 {
-    class FactorialGenerator
+    public class FactorialGenerator
     {
         public static int generate(int number)
         {
