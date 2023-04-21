@@ -27,7 +27,7 @@ namespace CombinatorGenerator
 
             int firstCharIndex = this.ChangeFirstSequenceCharIndex();
             result += this.sourceString[firstCharIndex];
-            result += this.GenerateSequenceWithoutFirstChar(firstCharIndex);
+            result += this.GenerateSequenceWithoutFirstChar(firstCharIndex, this.currentCombinationNumber);
 
             if (this.printForConsole)
             {
@@ -35,7 +35,11 @@ namespace CombinatorGenerator
             }
             this.currentCombinationNumber++;
 
-            this.SkipIgnoredCharCombinations();
+            if (this.NeedSkipDublicates())
+            {
+                this.SkipIgnoredCharCombinations();
+            }
+                
             return result;
         }
 
@@ -69,8 +73,6 @@ namespace CombinatorGenerator
 
         private int SkipEquivalentCombinationsForFirstChar(int result)
         {
-            int temp = this.currentCombinationNumber;
-
             if (PrintAllCombinations())
             {
                 return this.sourseStringLength - 1;
@@ -114,18 +116,18 @@ namespace CombinatorGenerator
             );
         }
 
-        private string GenerateSequenceWithoutFirstChar(int firstCharIndex)
+        public string GenerateSequenceWithoutFirstChar(int firstCharIndex, int currentCombinationNumber)
         {
             string result = "";
             string tempString = this.sourceString;
 
             tempString = tempString.Remove(firstCharIndex, 1);//-1?
-            int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength - 1);
+            int permutationSeed = currentCombinationNumber % (this.sourseStringLength - 1);
             char seedChar = this.sourceString[permutationSeed];
 
             for (int startIndex = tempString.Length; startIndex > 0; startIndex--)
             {
-                int currentIndex = this.currentCombinationNumber % startIndex;
+                int currentIndex = currentCombinationNumber % startIndex;
                 char currentChar = tempString[currentIndex];
 
                 tempString = tempString.Remove(currentIndex, 1);

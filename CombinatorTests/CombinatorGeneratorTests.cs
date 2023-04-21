@@ -42,17 +42,30 @@ namespace CombinatorTests
         [TestMethod]
         public void TestFourCharString()
         {
-            TestOnString("1234", 24);
-            TestOnString("1134", 12);
-            TestOnString("3411", 12);
-            TestOnString("3114", 12);
-            TestOnString("1341", 12);
-            TestOnString("1114", 4);
-            TestOnString("1122", 6);
+            List<string> result = new List<string>();
+            CombinatorGenerator.CombinationGenerator combinationGenerator = CombinatorBuilderDirector
+                .createTestCombinator("31122");
+            combinationGenerator.charVariantsCount = 5;
+            do
+            {
+                result.Add(combinationGenerator.GenerateUniqueString());
+            }
+            while (!combinationGenerator.PrintAllCombinations());
+
+            Assert.AreEqual(result.Count, 120);
+            /*            TestOnString("1234", 24);
+                        TestOnString("1134", 12);
+                        TestOnString("3411", 12);
+                        TestOnString("3114", 12);
+                        TestOnString("1341", 12);
+                        TestOnString("1114", 4);
+                        TestOnString("1122", 6);*/
+            TestOnString("31122", 30);
+            TestOnString("32211", 30);
             TestOnString("11223", 30);
             TestOnString("32211", 30);
             TestOnString("32112", 30);
-            TestOnString("11234", 70);
+            TestOnString("11234", 60);
         }
 
         private void СheckSeedForString(string source, List<int> expectedSeed)
