@@ -10,7 +10,7 @@ namespace CombinatorGenerator
     {
         public static CombinatorInterface createCombinator(string sourceString)
         {
-            return CombinatorBuilderDirector.generateFinishCombinator(sourceString);
+            return CombinatorBuilderDirector.createPublicCombinator(sourceString);
         }
 
         /*
@@ -18,7 +18,7 @@ namespace CombinatorGenerator
          * интерфейса(используется в консольном приложении, так как там доступ к полям
          * генератора не нужен)
          */
-        protected static CombinationGenerator generateFinishCombinator(string sourceString)
+        protected static CombinationGenerator createPublicCombinator(string sourceString)
         {
             CombinatorBuilder builder = new CombinatorBuilder();
             builder.createEmptyCombinator();

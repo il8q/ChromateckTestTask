@@ -1,14 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
-using CombinatorGenerator;
 
 namespace CombinatorTests
 {
     [TestClass]
     public class CombinatorGeneratorTests
     {
-        static bool checkResult(List<string> result)
+        static bool NotContainsDublicates(List<string> result)
         {
 
             foreach (string element in result)
@@ -16,7 +15,7 @@ namespace CombinatorTests
                 List<string> combination = result.FindAll(current => current == element);
                 Assert.IsFalse(
                     combination.Count > 1,
-                    String.Format("комбинация {0} уже существует. Комбинации {1}",
+                    String.Format("Комбинация {0} уже существует. Комбинации {1}",
                         element,
                         String.Join(", ", combination.ToArray())
                     )
@@ -28,15 +27,16 @@ namespace CombinatorTests
         private void TestOnString(string source, int combinationCount)
         {
             List<string> result = new List<string>();
-            CombinationGenerator combinationGenerator = CombinatorTests.CombinatorBuilderDirector.createTestCombinator(source);
+            CombinatorGenerator.CombinationGenerator combinationGenerator = CombinatorBuilderDirector
+                .createTestCombinator(source);
             do
             {
-                result.Add(combinationGenerator.generateUniqueString());
+                result.Add(combinationGenerator.GenerateUniqueString());
             }
-            while (!combinationGenerator.printAllCombinations());
+            while (!combinationGenerator.PrintAllCombinations());
 
             Assert.AreEqual(result.Count, combinationCount);
-            Assert.IsTrue(checkResult(result));
+            Assert.IsTrue(NotContainsDublicates(result));
         }
 
         [TestMethod]
@@ -51,26 +51,26 @@ namespace CombinatorTests
             TestOnString("1122", 6);
         }
 
-        private void checkSeedForString(String source, List<int> expectedSeed)
+        private void СheckSeedForString(String source, List<int> expectedSeed)
         {
-
             List<string> result = new List<string>();
-            CombinationGenerator combinationGenerator = CombinatorTests.CombinatorBuilderDirector.createTestCombinator(source);
+            CombinatorGenerator.CombinationGenerator combinationGenerator = CombinatorBuilderDirector
+                .createTestCombinator(source);
 
             int index = 0;
             do
             {
-                result.Add(combinationGenerator.generateUniqueString());
+                result.Add(combinationGenerator.GenerateUniqueString());
                 Assert.AreEqual(combinationGenerator.currentCombinationNumber, expectedSeed[index]);
                 index++;
             }
-            while (!combinationGenerator.printAllCombinations());
+            while (!combinationGenerator.PrintAllCombinations());
         }
 
         [TestMethod]
-        public void TestByStepFourCharString()
+        public void TestByStepForFourCharString()
         {
-            this.checkSeedForString("1134", new List<int>{
+            this.СheckSeedForString("1134", new List<int>{
                 1,
                 2,
                 3,
@@ -84,7 +84,7 @@ namespace CombinatorTests
                 23,
                 24,
             });
-            this.checkSeedForString("3411", new List<int>{
+            this.СheckSeedForString("3411", new List<int>{
                 4,
                 5,
                 6,

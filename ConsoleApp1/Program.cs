@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CombinationGenerator;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,21 +9,18 @@ namespace CombinatorGenerator
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
             try
             {
-                CombinatorInterface combinationGenerator = CombinatorBuilderDirector.createCombinator(args[0]);
-                do
-                {
-                    Console.WriteLine(combinationGenerator.generateUniqueString());
-                }
-                while (!combinationGenerator.printAllCombinations());
-            } 
+                Application application = ApplicationDirectorBuilder.CreateApplication(args);
+                return application.Run();
+            }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
                 Console.WriteLine(exception.StackTrace);
+                return Application.UNSUCCESS_EXECUTE;
             }
         }
     }

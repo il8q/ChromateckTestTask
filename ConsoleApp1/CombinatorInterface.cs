@@ -8,7 +8,7 @@ namespace CombinatorGenerator
 {
     public interface CombinatorInterface
     {
-        string generateUniqueString();
-        bool printAllCombinations();
+        string GenerateUniqueString();
+        bool PrintAllCombinations();
     }
 }

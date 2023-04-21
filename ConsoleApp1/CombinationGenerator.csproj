@@ -58,6 +58,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application.cs" />
+    <Compile Include="ApplicationDirectorBuilder.cs" />
+    <Compile Include="ApplicationBuilder.cs" />
+    <Compile Include="ApplicationInterface.cs" />
     <Compile Include="CombinationGenerator.cs" />
     <Compile Include="CombinatorBuilder.cs" />
     <Compile Include="CombinatorBuilderDirector.cs" />
