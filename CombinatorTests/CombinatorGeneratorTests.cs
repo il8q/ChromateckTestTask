@@ -15,9 +15,9 @@ namespace CombinatorTests
                 List<string> combination = result.FindAll(current => current == element);
                 Assert.IsFalse(
                     combination.Count > 1,
-                    String.Format("Комбинация {0} уже существует. Комбинации {1}",
+                    string.Format("Комбинация {0} уже существует. Комбинации {1}",
                         element,
-                        String.Join(", ", combination.ToArray())
+                        string.Join(", ", combination.ToArray())
                     )
                 );
             }
@@ -49,9 +49,13 @@ namespace CombinatorTests
             TestOnString("1341", 12);
             TestOnString("1114", 4);
             TestOnString("1122", 6);
+            TestOnString("11223", 30);
+            TestOnString("32211", 30);
+            TestOnString("32112", 30);
+            TestOnString("11234", 70);
         }
 
-        private void СheckSeedForString(String source, List<int> expectedSeed)
+        private void СheckSeedForString(string source, List<int> expectedSeed)
         {
             List<string> result = new List<string>();
             CombinatorGenerator.CombinationGenerator combinationGenerator = CombinatorBuilderDirector

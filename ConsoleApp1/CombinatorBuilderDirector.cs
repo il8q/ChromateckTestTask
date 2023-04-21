@@ -21,14 +21,13 @@ namespace CombinatorGenerator
         protected static CombinationGenerator createPublicCombinator(string sourceString)
         {
             CombinatorBuilder builder = new CombinatorBuilder();
-            builder.createEmptyCombinator();
-            builder.setStringData(sourceString);
-            builder.generateCharIndexes();
+            builder.СreateEmptyCombinator();
+            builder.SetStringData(sourceString);
 
-            builder.createEmptyCombinator();
-            builder.setStringData(sourceString);
-            builder.findNotUniqueChars();
-            builder.findIgnoreIndexChars();
+            builder.СreateEmptyCombinator();
+            builder.SetStringData(sourceString);
+            builder.FindNotUniqueChars();
+            builder.FindIgnoreIndexChars();
             return builder.result;
         }
     }

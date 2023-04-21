@@ -13,7 +13,7 @@ namespace CombinatorGenerator
         {
             try
             {
-                Application application = ApplicationDirectorBuilder.CreateApplication(args);
+                ApplicationInterface application = ApplicationDirectorBuilder.CreateApplication(args);
                 return application.Run();
             }
             catch (Exception exception)

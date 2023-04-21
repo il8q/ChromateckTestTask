@@ -8,20 +8,18 @@ namespace CombinatorGenerator
 {
     public class CombinationGenerator: CombinatorInterface
     {
-        public String sourceString;
-        public List<int> indexList;
-        public Dictionary<int, char> charToIndexList;
+        public string sourceString;
         public int currentCombinationNumber = 0;
         public int sourseStringLength;
         public int maxCombinationMumber = 0;
-        private int _printCounter = 1;
         public bool printForConsole = true;
 
         public List<int> ignoreIndexChars = new List<int>();
         public int combinationCountForFirstChar;
-        public Dictionary<char, int> ingoreCombinationCounts;
         public int charVariantsCount;
         public Dictionary<char, int> notUniqueChars;
+
+        private int _printCounter = 1;
 
         public string GenerateUniqueString()
         {
@@ -119,7 +117,7 @@ namespace CombinatorGenerator
         private string GenerateSequenceWithoutFirstChar(int firstCharIndex)
         {
             string result = "";
-            String tempString = this.sourceString;
+            string tempString = this.sourceString;
 
             tempString = tempString.Remove(firstCharIndex, 1);//-1?
             int permutationSeed = this.currentCombinationNumber % (this.sourseStringLength - 1);
@@ -157,26 +155,9 @@ namespace CombinatorGenerator
             return combinationCount;
         }
 
-        private string generateCurrentString()
-        {
-            String result = "";
-            foreach (int index in this.indexList)
-            {
-                result += this.charToIndexList[index];
-            }
-            return result;
-        }
-
         public bool PrintAllCombinations()
         {
             return this.currentCombinationNumber >= this.maxCombinationMumber;
-        }
-
-        private void Swap(ref List<int> indexArray, int i, int j)
-        {
-            int s = indexArray[i];
-            indexArray[i] = indexArray[j];
-            indexArray[j] = s;
         }
     }
 }
